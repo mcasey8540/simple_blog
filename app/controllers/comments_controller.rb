@@ -1,10 +1,11 @@
 class CommentsController < ApplicationController
+
+  before_filter :happify, :only => [:create]
+
   # POST /comments
   # POST /comments.json
   def create
-    @article = Article.find(params[:article_id])
-    @comment = @article.comments.build(params[:comment])
-
+    
     respond_to do |format|
       if @comment.save
         format.html { redirect_to @comment.article, notice: 'Comment was successfully created.' }
@@ -26,5 +27,11 @@ class CommentsController < ApplicationController
       format.html { redirect_to @comment.article }
       format.json { head :no_content }
     end
+  end
+
+  def happify
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.build(params[:comment])
+    @comment.body.gsub!(/sad/, "happy")
   end
 end
