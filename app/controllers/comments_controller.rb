@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
 
-  before_filter :happify, :only => [:create]
+  before_filter :happify, only: :create
 
   # POST /comments
   # POST /comments.json
@@ -29,9 +29,12 @@ class CommentsController < ApplicationController
     end
   end
 
+  private
+
   def happify
     @article = Article.find(params[:article_id])
     @comment = @article.comments.build(params[:comment])
     @comment.body.gsub!(/sad/, "happy")
   end
+
 end

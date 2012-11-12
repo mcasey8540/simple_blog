@@ -4,6 +4,8 @@ class ArticlesController < ApplicationController
 
   before_filter :article_upcase, :only => [:index]
 
+  around_filter  :exception, only: :index
+
 
  # GET /articles
   # GET /articles.json
@@ -96,4 +98,19 @@ class ArticlesController < ApplicationController
     @articles = Article.all
     @articles.map {|article| article.title.upcase!}
   end
+
+  def exception
+    begin
+      yield
+    rescue
+      if params[:action] == "index"
+        render text: "xyz"
+      else
+        flash[:notice] = "An exception was raised"
+        render action: index
+      end
+    end
+  end
+
+
 end
